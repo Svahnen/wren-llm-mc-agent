@@ -1,0 +1,11 @@
+{
+  "name": "wave_at_person",
+  "desc": "walk up to a player, look at them and wave",
+  "params": { "person": { "kind": "player", "required": true } },
+  "steps": [
+    { "id": "locate", "desc": "find the person", "op": "find_person", "args": { "person": "$person", "max_s": 30 }, "retry": 0, "on_fail": { "abort": "person_not_found" } },
+    { "id": "join", "desc": "walk up to them", "when": ["!person_within:$person:5", "day", "!hostile_near"], "op": "approach_person", "args": { "person": "$person", "radius": 4 }, "retry": 1, "on_fail": "skip" },
+    { "id": "look", "desc": "look at them", "do": { "skill": "look_at", "args": { "target": "$person" } }, "on_fail": "skip" },
+    { "id": "wave", "desc": "wave", "do": { "skill": "gesture", "args": { "kind": "wave" } }, "on_fail": "skip" }
+  ]
+}

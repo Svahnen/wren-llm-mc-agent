@@ -1,0 +1,49 @@
+wren-llm-mc-agent (Wren, a Mineflayer Minecraft companion bot)
+Copyright 2026 Jonny Svahn (Svahnen)
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.
+"Minecraft" is a trademark of Mojang Synergies AB / Microsoft. This repository contains no Minecraft game assets, textures, sounds,
+mappings or code. Map icons (map-addon/) are original abstract drawings made for this project, inspired by in-game mobs; they contain
+no Mojang assets.
+
+---------------------------------------------------------------------------
+Third-party software (not bundled, installed by you)
+---------------------------------------------------------------------------
+Nothing below is part of this repository; you download it yourself and it keeps its own licence.
+
+Node dependencies of bot/ (see bot/package-lock.json): mineflayer (MIT), minecraft-protocol (BSD-3-Clause), mineflayer-pathfinder (MIT),
+minecraft-data (MIT; it contains game-derived and community-wiki-derived data under its own terms) and their dependencies, which are
+MIT, BSD, ISC, Apache-2.0, 0BSD and CC0 licensed. brain/, mind/, voice/ and report/ have no npm dependencies.
+
+Java build and test dependencies (voice-mod/, map-addon/, downloaded by Gradle at build time): Fabric Loom (MIT), Fabric Loader and
+Fabric API (Apache-2.0), BlueMapAPI (MIT), the Simple Voice Chat API (see below), JUnit 5 (EPL-2.0, tests only), Gson (Apache-2.0, tests only).
+Builds also download Mojang's official mappings (Microsoft licence: development use only, no redistribution of the mappings).
+
+Minecraft server mods (downloaded from Modrinth by server/fetch-mods.sh, never redistributed here; check each licence on its Modrinth page):
+Fabric API (Apache-2.0), Fabric Language Kotlin (Apache-2.0), BlueMap (MIT), ServerReplay (MIT), Skin Restorer (MIT).
+
+Simple Voice Chat (Max Henkel) is ALL RIGHTS RESERVED. It is not part of this repository and may not be redistributed. Download it yourself
+from Modrinth. wrenvoice only compiles against its public API (compileOnly) as an addon, the documented extension mechanism
+(https://modrepo.de/minecraft/voicechat/api); the API's licence is not published separately. Do not redistribute wrenvoice together with
+the Simple Voice Chat jar, and do not build a container image or archive that contains it.
+
+The Fabric loader and the itzg/minecraft-server container image (Apache-2.0, pinned by digest in server/start.sh) fetch the Minecraft
+server, which is subject to the Minecraft EULA (https://www.minecraft.net/en-us/eula). You accept it yourself with MINECRAFT_EULA=accept.
+
+Optional voice stack (you install the servers and models yourself; versions pinned in voice/box/requirements-*.txt):
+Kokoro-82M TTS and the kokoro / misaki packages (Apache-2.0), sherpa-onnx (Apache-2.0), NVIDIA parakeet-tdt-0.6b-v3 (CC-BY-4.0,
+attribution: NVIDIA), torch, numpy, soundfile (BSD; soundfile wraps libsndfile, LGPL-2.1), FastAPI (MIT), uvicorn (BSD-3-Clause),
+NeMo toolkit (Apache-2.0).
+IMPORTANT: Kokoro's English phonemiser (misaki[en]) installs espeak-ng (GPL-3.0) through espeakng-loader. Installing it yourself in your own
+venv is fine; if you redistribute a bundle, venv or container that includes it, you must comply with the GPL for that component and
+Apache-2.0 does not cover it.
+Streaming STT model: any sherpa-onnx streaming NeMo-transducer model directory you choose (STTS_MODEL_DIR). No model is named or shipped
+here; NVIDIA NeMo models are usually CC-BY-4.0, but check the licence of the exact model you download.
+No model files are included.
+
+Language models for the brain are not included and not required: any OpenAI-compatible endpoint works. Check the licence of the model you choose.
+
+Test fixtures: no audio is shipped. The voice end-to-end tests skip unless you generate speech clips yourself (voice/tools/make-fixture.mjs, Kokoro-82M);
+report and brain fixtures are synthetic.

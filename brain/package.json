@@ -1,0 +1,13 @@
+{
+  "name": "wren-brain",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "description": "Wren brain host: System 2 contract, scheduler, LLM client, local endpoint for the bot process",
+  "scripts": {
+    "test": "WREN_AUTONOMY=classic node --test test/*.test.js && WREN_AUTONOMY=high node --test test/ai1.test.js",
+    "start": "node server.js"
+  },
+  "dependencies": {}
+}

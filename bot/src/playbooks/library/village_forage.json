@@ -1,0 +1,44 @@
+{
+  "name": "village_forage",
+  "desc": "walk to a known village in daylight and take food: hay bales (1 bale = 9 wheat; at least one bale is always left standing), ONLY ripe crops (replanted), then bake bread (3 wheat each). Never touches villagers or their chests. Needs daylight for the walk there; refuses honestly when dusk is too close. Result lists what you got",
+  "params": {
+    "place": {
+      "kind": "place",
+      "required": true
+    }
+  },
+  "cooldown": {
+    "reasons": [
+      "nothing_gained",
+      "unreachable"
+    ],
+    "s": 600,
+    "radius": 60,
+    "text": "the village gave nothing (no spare hay bale, no ripe crop)",
+    "hint": "come back after a day when the crops have grown; the farm_plot at home is the lasting source"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "hay_block",
+          "wheat",
+          "wheat_seeds",
+          "bread",
+          "carrot",
+          "potato",
+          "beetroot"
+        ]
+      }
+    },
+    {
+      "id": "go",
+      "op": "village_run",
+      "args": {
+        "place": "$place"
+      }
+    }
+  ]
+}

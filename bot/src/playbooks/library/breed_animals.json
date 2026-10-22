@@ -1,0 +1,11 @@
+{
+  "name": "breed_animals",
+  "desc": "feed two adult animals of one kind in your pen (or near you) with their food so a baby is born: wheat for cows/sheep, carrots/potatoes for pigs, seeds for chickens",
+  "params": {},
+  "cooldown": { "reasons": ["no_feed", "cannot_breed", "no_offspring_yet", "breed_cooldown", "pen_full"], "s": 300, "radius": 30, "text": "breeding did not work here: need 2 adult animals of one kind in the pen and their food; parents rest 5 min after breeding, a baby needs 20 min to grow, and a pen is kept at 4-6 animals of a kind", "hint": "harvest wheat from the farm, or lure more animals into the pen first; with 6 or more of one kind take meat (pen_slaughter) instead" },
+  "steps": [
+    { "id": "need_feed", "when": ["!has_feed"], "op": "fail", "args": { "reason": "no_feed" }, "on_fail": { "abort": "no_feed" } },
+    { "id": "go_pen", "when": ["pen_known", "!at_place:pen:6"], "do": { "skill": "go_to", "args": { "place": "pen" } }, "retry": 1, "on_fail": "skip" },
+    { "id": "feed", "when": ["!hostile_near"], "do": { "skill": "breed_animals", "args": {} }, "retry": 0, "on_fail": { "abort": "no_offspring" } }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "name": "fish_hit",
+  "desc": "kill cod and salmon with your sword or fist from the bank, no rod needed (slow, one raw fish per kill; cod and salmon only, never pufferfish); then cook and eat them. Needs fish swimming within 20 m in daylight. Result says fish got",
+  "params": {
+    "count": {
+      "kind": "int",
+      "default": 2
+    }
+  },
+  "cooldown": {
+    "reasons": [
+      "no_fish_seen",
+      "fish_too_deep",
+      "fish_unreachable",
+      "night",
+      "no_drop"
+    ],
+    "s": 180,
+    "radius": 40,
+    "text": "no fish to hit here (none in view, too deep, or night)",
+    "hint": "walk along a river or pond (explore_and_return), or use fish_session with a rod"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "cod",
+          "salmon",
+          "cooked_cod",
+          "cooked_salmon"
+        ]
+      }
+    },
+    {
+      "id": "night",
+      "when": [
+        "!day"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "night"
+      },
+      "on_fail": {
+        "abort": "night"
+      }
+    },
+    {
+      "id": "look",
+      "desc": "walk toward water when no fish is in view",
+      "when": [
+        "!fish_near",
+        "!water_within:16",
+        "day"
+      ],
+      "do": {
+        "skill": "explore",
+        "args": {
+          "direction": "any"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "none",
+      "when": [
+        "!fish_near"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "no_fish_seen"
+      },
+      "on_fail": {
+        "abort": "no_fish_seen"
+      }
+    },
+    {
+      "id": "hit",
+      "desc": "hit fish from the bank, pick up the drop",
+      "loop": {
+        "until": [
+          "has_match:^(cod|salmon)$:$count"
+        ],
+        "max": 4
+      },
+      "when": [
+        "fish_near",
+        "!hostile_near"
+      ],
+      "do": {
+        "skill": "hunt",
+        "args": {
+          "target": "fish"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "cook",
+      "when": [
+        "has_raw",
+        "has_fuel",
+        "can_make_furnace",
+        "food_gt:5"
+      ],
+      "do": {
+        "skill": "cook",
+        "args": {}
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "eat",
+      "when": [
+        "has_food",
+        "food_lt:20"
+      ],
+      "do": {
+        "skill": "eat",
+        "args": {}
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "report",
+      "op": "rs3_report",
+      "args": {
+        "what": "fish_hit",
+        "goal": {
+          "items": [
+            "cod",
+            "salmon",
+            "cooked_cod",
+            "cooked_salmon"
+          ],
+          "n": 1,
+          "or_food_gain": 3
+        },
+        "reason": "no_drop"
+      }
+    }
+  ]
+}

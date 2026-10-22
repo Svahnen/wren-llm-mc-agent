@@ -1,0 +1,5 @@
+{ "_note": "Describes the TTS model your install uses; copied into each run MANIFEST. Edit to match your setup, or point VOICE_TTS_MODEL_JSON at your own file.",
+  "engine": "kokoro", "model": "hexgrad/Kokoro-82M",
+  "native_sample_rate": 24000,
+  "resampler": "voice/src/audio.js resample() 24k->48k, Hann-windowed sinc, then pad to a multiple of 960 samples (voice/src/tts.js to48k)",
+  "determinism": "bit-identical for the same text+voice+speed+emotion ONLY when a seed is sent (box/tts_server.py 'seed' field, health.seed=true). Without a seed the decoder noise differs per call." }

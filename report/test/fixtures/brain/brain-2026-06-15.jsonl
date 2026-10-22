@@ -1,0 +1,4 @@
+{"ts":"2026-06-15T10:00:15.000Z","ev":"intent","intent_id":"i1","goal":"gather_wood","args":{},"speech":"I need wood <b>now</b>.","human":false}
+{"ts":"2026-06-15T10:00:50.000Z","ev":"event","type":"human_speech","status":null,"from":"Alex"}
+{"ts":"2026-06-15T10:01:30.000Z","ev":"reflection","chars":200}
+{"ts":"2026-06-15T10:01:35.000Z","ev":"invalid","attempt":0,"errors":["x"]}

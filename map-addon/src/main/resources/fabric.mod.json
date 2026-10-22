@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "wrenmap",
+  "version": "${version}",
+  "name": "Wren Map Overlays",
+  "description": "BlueMap addon: live markers for nearby mobs and animals, plus Wren's trail, home, deaths, places, goal and thought.",
+  "authors": ["Svahnen"],
+  "license": "Apache-2.0",
+  "environment": "server",
+  "entrypoints": {
+    "main": ["wren.wrenmap.WrenMapMod"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "bluemap": ">=5.0"
+  }
+}

@@ -1,0 +1,3 @@
+- [ ] `npm test` passes offline
+- [ ] No private data (player names, real coordinates, hostnames, tokens) in code, tests or fixtures
+- [ ] My contribution is licensed under Apache-2.0 and signed off (`git commit -s`)

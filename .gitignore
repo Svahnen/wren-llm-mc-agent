@@ -1,0 +1,69 @@
+# secrets and machine-local config (never commit)
+*.env
+!*.env.example
+secrets.env
+*.key
+*.pem
+# dependencies and build output
+node_modules/
+build/
+build-out/
+.gradle/
+.gradle-home/
+*.jar
+# run-time data of every component (memories, logs, recordings, world)
+logs/
+runtime/
+runtime2/
+run/
+out/
+archive/
+backups/
+server/data/*
+!server/data/whitelist.example.json
+bot/logs/
+bot/runtime/
+brain/logs/
+brain/runtime/
+voice/logs/
+voice/runtime*/
+voice/archive/
+report/out/
+report/run/
+docs/journal/
+docs/audit/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.jsonl
+!report/test/fixtures/**/*.jsonl
+!voice/test/fixtures/**/*.jsonl
+# synthetic report test fixtures live under logs/ and runtime/ directory names, which are ignored above
+!report/test/fixtures/logs/
+!report/test/fixtures/logs/**
+!report/test/fixtures/runtime/
+!report/test/fixtures/runtime/**
+!report/test/fixtures/brain/
+!report/test/fixtures/brain/**
+thoughts.jsonl
+*.pid
+# models and media (bring your own)
+*.gguf
+*.safetensors
+*.onnx
+*.nemo
+*.pth
+*.pt
+*.wav
+*.mp3
+*.ogg
+*.flac
+*.mp4
+*.mkv
+*.mcpr
+bot/models/
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/

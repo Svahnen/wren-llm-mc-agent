@@ -1,0 +1,8 @@
+{
+  "name": "make_camp",
+  "desc": "make a night camp right where you are: a torch, then a sealed pillbox (9+ blocks) or a hole with a cap (no blocks needed), wait inside until morning, climb out, remember the camp. Use it at dusk when home is too far to reach; bed=yes also builds a small hut and sleeps in your bed item (sets your spawn)",
+  "params": { "bed": { "kind": "string", "default": "no" } },
+  "steps": [
+    { "id": "camp", "desc": "torch, shelter, wait for morning", "op": "camp_here", "args": { "bed": "$bed" }, "on_fail": { "abort": "no_camp_possible" } }
+  ]
+}

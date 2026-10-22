@@ -1,0 +1,6 @@
+data/*
+!data/whitelist.example.json
+.lifecycle.lock
+.watchdog.pid
+watchdog.log
+.intentional-stop

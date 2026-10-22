@@ -1,0 +1,8 @@
+{
+  "name": "new_home",
+  "desc": "make the place you are standing at your new home (your old home stays remembered as old_home). Use only when you found a much better area (food, water, trees) and want to live here",
+  "params": {},
+  "steps": [
+    { "id": "move", "desc": "remember the old home, set home here", "op": "relocate_home", "args": {}, "on_fail": { "abort": "could_not_set_home" } }
+  ]
+}

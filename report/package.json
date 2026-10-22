@@ -1,0 +1,9 @@
+{
+  "name": "wren-report",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test --test-force-exit test/*.test.mjs"
+  },
+  "license": "Apache-2.0"
+}

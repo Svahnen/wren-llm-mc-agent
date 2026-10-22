@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "note": "Boxes the body may never dig/dismantle (bot.dig guard + gather target filter). Inclusive block coordinates. Add your own, e.g. a village or a base you built.",
+  "boxes": []
+}

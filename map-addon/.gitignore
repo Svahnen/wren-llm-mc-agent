@@ -1,0 +1,5 @@
+.gradle/
+.gradle-home/
+build/
+test-server/data/
+test-server/*.log

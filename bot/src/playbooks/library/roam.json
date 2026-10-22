@@ -1,0 +1,11 @@
+{
+  "name": "roam",
+  "desc": "move your living area for a while (1-4 days): walk out toward food-rich ground (plains, forest, animals, grass) in daylight, hunt, forage and pick grass seeds on the way, remember good food/seed/water/tree places, make a night camp (pit or pillbox with a torch) where dusk finds you instead of going home, then walk home. Use it when the ground around home is used up",
+  "params": { "direction": { "kind": "string", "default": "any" }, "days": { "kind": "int", "default": 2 }, "max_dist": { "kind": "rdist", "default": 400 }, "at_dusk": { "kind": "string", "default": "auto" }, "bed": { "kind": "string", "default": "no" } },
+  "steps": [
+    { "id": "plan", "desc": "pick a heading, check the daylight", "op": "roam_plan", "args": { "direction": "$direction", "days": "$days", "max_dist": "$max_dist", "at_dusk": "$at_dusk", "bed": "$bed" } },
+    { "id": "kit", "desc": "top up building blocks, torches, food, a bed", "op": "roam_kit", "args": {}, "on_fail": "skip" },
+    { "id": "trip", "desc": "walk, forage, camp at dusk, continue next morning, until goals are met or the days are used", "op": "roam_day", "args": {}, "loop": { "until": ["roam_over"], "max": 10 }, "on_fail": "skip" },
+    { "id": "report", "desc": "say what came of it", "op": "roam_report", "args": {} }
+  ]
+}

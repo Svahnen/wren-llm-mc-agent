@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "note": "Example: copy the box objects into protected.json (or point PROTECTED_FILE at your own file).",
+  "boxes": [
+    { "name": "my_village", "min": [100, -64, 100], "max": [200, 320, 200], "reason": "built by players, do not dig" }
+  ]
+}

@@ -1,0 +1,10 @@
+# Optional second-pass STT (stt_parakeet_server.py), model nvidia/parakeet-tdt-0.6b-v3 (CC-BY-4.0, attribution: NVIDIA).
+# python3 -m venv parakeet-venv && parakeet-venv/bin/pip install -r requirements-stt-parakeet.txt
+# Pinned to the versions current on 2026-10-22 (PyPI). Licences: nemo_toolkit Apache-2.0, torch BSD-3-Clause, numpy BSD-3-Clause,
+# soundfile BSD-3-Clause (libsndfile LGPL-2.1), fastapi MIT, uvicorn BSD-3-Clause.
+nemo_toolkit[asr]==3.0.0
+torch==2.14.1
+numpy==2.5.4
+soundfile==0.14.0
+fastapi==0.159.1
+uvicorn==0.54.0

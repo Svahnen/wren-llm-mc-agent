@@ -1,0 +1,12 @@
+{
+  "name": "leave_hole",
+  "desc": "climb out of a hole you dug (break the cap, pillar up or dig stairs); safe whenever you decide",
+  "params": {},
+  "done_if": [],
+  "steps": [
+    { "id": "exit", "choose": [
+      { "id": "pillar_out", "when": ["blocks_ge:2"], "do": { "skill": "exit_hole", "args": {} } },
+      { "id": "stairs_out", "do": { "skill": "dig_stairs_up", "args": {} } }
+    ], "retry": 1, "on_fail": { "abort": "cannot_exit_hole" } }
+  ]
+}

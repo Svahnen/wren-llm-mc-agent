@@ -1,0 +1,233 @@
+{
+  "name": "bootstrap_kit",
+  "desc": "one chain from trees to tools for a depleted home: kit=stone_tools (table, wooden then stone pickaxe, axe, sword; about 5 logs and 10 cobblestone), kit=torches (8 torches from charcoal: about 7 logs and 8 cobblestone for the furnace), kit=farm_kit (stone tools + stone hoe + 4 torches: about 8 logs and 18 cobblestone). Result lists what you have and what is missing",
+  "params": {
+    "kit": {
+      "kind": "kit",
+      "default": "stone_tools"
+    }
+  },
+  "cooldown": {
+    "reasons": [
+      "no_wood",
+      "no_stone",
+      "night",
+      "kit_incomplete"
+    ],
+    "s": 300,
+    "radius": 40,
+    "text": "the kit cannot be finished here: trees or stone are used up, or it is night",
+    "hint": "resource_expedition resource=wood (or stone) walks to fresh ground and collects there; then run bootstrap_kit again"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "oak_log",
+          "birch_log",
+          "spruce_log",
+          "cobblestone",
+          "stick",
+          "torch",
+          "charcoal",
+          "coal",
+          "wooden_pickaxe",
+          "stone_pickaxe",
+          "stone_axe",
+          "stone_sword",
+          "stone_hoe",
+          "wooden_hoe",
+          "furnace"
+        ]
+      }
+    },
+    {
+      "id": "gate",
+      "op": "daylight_gate",
+      "args": {
+        "what": "bootstrap_kit",
+        "have_logs": "$logs"
+      },
+      "on_fail": {
+        "abort": "night"
+      }
+    },
+    {
+      "id": "wood",
+      "desc": "logs",
+      "when": [
+        "!has_match:_log$:$logs",
+        "!has_match:_planks$:20",
+        "day",
+        "!hostile_near",
+        "free_slots_ge:2"
+      ],
+      "do": {
+        "skill": "gather_wood",
+        "args": {
+          "count": "$logs"
+        }
+      },
+      "retry": 1,
+      "on_fail": "skip"
+    },
+    {
+      "id": "table",
+      "when": [
+        "!has_item:crafting_table:1",
+        "!table_near"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "crafting_table"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "wood_pick",
+      "when": [
+        "!has_match:_pickaxe$:1"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "wooden_pickaxe"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "stone",
+      "desc": "cobblestone",
+      "when": [
+        "!has_match:^cobblestone$:$cobble",
+        "day",
+        "!hostile_near",
+        "has_match:_pickaxe$:1"
+      ],
+      "do": {
+        "skill": "gather_stone",
+        "args": {
+          "count": "$cobble"
+        }
+      },
+      "retry": 1,
+      "on_fail": "skip"
+    },
+    {
+      "id": "stone_pick",
+      "when": [
+        "!param_is:kit:torches",
+        "!has_match:^(stone|iron|diamond)_pickaxe$:1"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "stone_pickaxe"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "stone_axe",
+      "when": [
+        "!param_is:kit:torches",
+        "!has_match:^(stone|iron|diamond)_axe$:1"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "stone_axe"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "stone_sword",
+      "when": [
+        "!param_is:kit:torches",
+        "!has_match:^(stone|iron|diamond)_sword$:1"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "stone_sword"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "hoe",
+      "desc": "a hoe for the farm (stone, else wooden)",
+      "when": [
+        "param_is:kit:farm_kit",
+        "!has_match:_hoe$:1"
+      ],
+      "choose": [
+        {
+          "id": "stone_hoe",
+          "do": {
+            "skill": "craft",
+            "args": {
+              "item": "stone_hoe"
+            }
+          }
+        },
+        {
+          "id": "wooden_hoe",
+          "do": {
+            "skill": "craft",
+            "args": {
+              "item": "wooden_hoe"
+            }
+          }
+        }
+      ],
+      "on_fail": "skip"
+    },
+    {
+      "id": "charcoal",
+      "desc": "smelt logs into charcoal for the torches",
+      "when": [
+        "!param_is:kit:stone_tools",
+        "!coal_ge:$crafts",
+        "!has_item:torch:$torches",
+        "has_match:^cobblestone$:8"
+      ],
+      "do": {
+        "skill": "make_charcoal",
+        "args": {
+          "count": "$crafts"
+        }
+      },
+      "retry": 1,
+      "on_fail": "skip"
+    },
+    {
+      "id": "torches",
+      "when": [
+        "!param_is:kit:stone_tools",
+        "coal_ge:1"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "torch",
+          "count": "$torches"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "report",
+      "op": "kit_report",
+      "args": {
+        "kit": "$kit"
+      }
+    }
+  ]
+}

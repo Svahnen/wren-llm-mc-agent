@@ -1,0 +1,14 @@
+{
+  "name": "roof_over_me",
+  "desc": "put a 3x3 roof 3 m above you from any 12 solid blocks (skeleton arrows from above, phantoms, rain); collects blocks first if short",
+  "params": {},
+  "cooldown": { "reasons": ["not_enough_blocks"], "s": 90, "radius": 20, "text": "fewer than 12 building blocks and none can be collected here", "hint": "gather resource=dirt count=16 or gather resource=stone, then try again; or take_cover behind a wall" },
+  "steps": [
+    { "id": "blocks", "desc": "collect building blocks (any kind)", "when": ["!blocks_ge:12", "free_slots_ge:2", "!hostile_near"], "loop": { "until": ["blocks_ge:12"], "max": 4 }, "choose": [
+      { "id": "dirt", "do": { "skill": "collect", "args": { "resource": "dirt", "count": 16 } } },
+      { "id": "stone", "when": ["has_match:_pickaxe$:1"], "do": { "skill": "gather_stone", "args": { "count": 16 } } }
+    ], "on_fail": "skip" },
+    { "id": "enough", "when": ["!blocks_ge:12"], "op": "fail", "args": { "reason": "not_enough_blocks" }, "on_fail": { "abort": "not_enough_blocks" } },
+    { "id": "roof", "do": { "skill": "roof_over_me", "args": {} }, "retry": 1, "on_fail": { "abort": "could_not_roof" } }
+  ]
+}

@@ -1,0 +1,7 @@
+.gradle/
+.gradle-home/
+build/
+.idea/
+run/
+test-server/data/
+tools/node_modules/

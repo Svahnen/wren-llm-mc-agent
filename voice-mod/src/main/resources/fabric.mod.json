@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "wrenvoice",
+  "version": "${version}",
+  "name": "Wren Voice Bridge",
+  "description": "Server-side Simple Voice Chat bridge: lets an external process hear nearby players and speak from the bot's body.",
+  "authors": ["Svahnen"],
+  "license": "Apache-2.0",
+  "environment": "server",
+  "entrypoints": {
+    "main": ["wren.wrenvoice.WrenVoiceMod"],
+    "voicechat": ["wren.wrenvoice.WrenVoicePlugin"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "voicechat": "*"
+  }
+}

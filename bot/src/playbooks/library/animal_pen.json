@@ -1,0 +1,11 @@
+{
+  "name": "animal_pen",
+  "desc": "build a 5x5 pen around you from fences or any blocks (15 fences, or 28 blocks), lure nearby animals in with wheat/seeds/carrots if you hold them, close the gate cell",
+  "params": {},
+  "cooldown": { "reasons": ["site_not_flat", "not_enough_fence_or_blocks"], "s": 180, "radius": 20, "text": "no flat 5x5 here or not enough fences/blocks", "hint": "walk to flat grass; gather resource=dirt count=32 first" },
+  "steps": [
+    { "id": "blocks", "desc": "collect building blocks", "when": ["!blocks_or_fences:28", "free_slots_ge:2", "!hostile_near"], "loop": { "until": ["blocks_or_fences:28"], "max": 4 }, "do": { "skill": "collect", "args": { "resource": "dirt", "count": 16 } }, "on_fail": "skip" },
+    { "id": "enough", "when": ["!blocks_or_fences:28"], "op": "fail", "args": { "reason": "not_enough_fence_or_blocks" }, "on_fail": { "abort": "not_enough_fence_or_blocks" } },
+    { "id": "pen", "when": ["day"], "do": { "skill": "animal_pen", "args": {} }, "retry": 1, "on_fail": { "abort": "could_not_build_pen" } }
+  ]
+}

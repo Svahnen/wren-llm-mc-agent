@@ -1,0 +1,17 @@
+{
+  "name": "build_shelter",
+  "desc": "make yourself a safe enclosed place from whatever solid blocks you have (any material): collect blocks if short, then the best fitting protection",
+  "params": {},
+  "done_if": ["sealed"],
+  "steps": [
+    { "id": "blocks", "desc": "get building blocks (any kind)", "when": ["!blocks_ge:10", "free_slots_ge:2", "!hostile_near"], "loop": { "until": ["blocks_ge:10"], "max": 3 }, "do": { "skill": "collect", "args": { "resource": "dirt", "count": 12 } }, "on_fail": "skip" },
+    { "id": "protect", "desc": "protection", "choose": [
+      { "id": "take_cover", "when": ["exposed_to_shooter"], "do": { "skill": "take_cover", "args": {} } },
+      { "id": "dig_in", "when": ["!sealed", "blocks_ge:6", "hostile_near"], "do": { "skill": "dig_in", "args": {} } },
+      { "id": "shelter", "when": ["blocks_ge:9"], "do": { "skill": "shelter", "args": { "max_wait_s": 300 } } },
+      { "id": "dig_in_tool", "when": ["!sealed", "has_match:_(pickaxe|shovel)$:1", "blocks_ge:1"], "do": { "skill": "dig_in", "args": {} } },
+      { "id": "wall_ring", "when": ["blocks_ge:8"], "do": { "skill": "build", "args": { "plan": "wall_ring", "height": 2 } } }
+    ], "retry": 0, "on_fail": { "abort": "no_way_to_shelter" } },
+    { "id": "close_doors", "desc": "close doors nearby", "do": { "skill": "close_doors_nearby", "args": { "radius": 6 } }, "on_fail": "skip" }
+  ]
+}

@@ -1,0 +1,45 @@
+plugins {
+    id 'fabric-loom' version '1.10.5'
+}
+
+version = project.mod_version
+group = 'wren'
+base { archivesName = 'wrenmap' }
+
+repositories {
+    maven { url = 'https://repo.bluecolored.de/releases' }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    // BlueMap 5.7 bundles API 2.7.x at runtime; compile-only here.
+    compileOnly("de.bluecolored.bluemap:BlueMapAPI:${project.bluemap_api_version}") {
+        exclude group: 'com.google.code.gson'
+    }
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.2'
+    testImplementation 'com.google.code.gson:gson:2.10.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach { options.release = 21 }
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand 'version': project.version }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging { events 'passed', 'failed', 'skipped'; exceptionFormat 'full' }
+}

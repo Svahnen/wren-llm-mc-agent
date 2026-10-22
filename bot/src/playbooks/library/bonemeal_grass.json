@@ -1,0 +1,107 @@
+{
+  "name": "bonemeal_grass",
+  "desc": "use bone meal on grass in an open meadow so new grass grows, then break it for seeds (S2's choice; needs bone meal). The result counts the real number of new plants and seeds gained; the yield per bone meal is not known yet on this server (about 2-5 seeds expected, an estimate)",
+  "params": {
+    "uses": {
+      "kind": "int",
+      "default": 2
+    }
+  },
+  "cooldown": {
+    "reasons": [
+      "no_bone_meal",
+      "no_free_grass",
+      "thin_result",
+      "night",
+      "no_seeds_gained"
+    ],
+    "s": 300,
+    "radius": 40,
+    "text": "bone meal on grass gave little (none held, no open grass, or a thin result)",
+    "hint": "find a flat open meadow; or grass_seeds breaks the grass that already stands"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "bone_meal",
+          "wheat_seeds"
+        ]
+      }
+    },
+    {
+      "id": "gate",
+      "when": [
+        "!bone_meal"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "no_bone_meal"
+      },
+      "on_fail": {
+        "abort": "no_bone_meal"
+      }
+    },
+    {
+      "id": "night",
+      "when": [
+        "!day"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "night"
+      },
+      "on_fail": {
+        "abort": "night"
+      }
+    },
+    {
+      "id": "use",
+      "do": {
+        "skill": "bonemeal_grass",
+        "args": {
+          "uses": "$uses_call"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "harvest",
+      "desc": "break the sprouted grass for seeds",
+      "when": [
+        "day",
+        "!hostile_near"
+      ],
+      "loop": {
+        "until": [
+          "has_item:wheat_seeds:99"
+        ],
+        "max": 2
+      },
+      "do": {
+        "skill": "grass_seeds",
+        "args": {
+          "count": 9,
+          "radius": 12
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "report",
+      "op": "rs3_report",
+      "args": {
+        "what": "bonemeal_grass",
+        "goal": {
+          "gain": [
+            "wheat_seeds"
+          ],
+          "n": 1
+        },
+        "reason": "no_seeds_gained"
+      }
+    }
+  ]
+}

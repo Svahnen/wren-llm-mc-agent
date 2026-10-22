@@ -1,0 +1,10 @@
+# Streaming STT server (stt_stream_server.py). python3 -m venv stt-venv && stt-venv/bin/pip install -r requirements-stt.txt
+# Pinned to the versions current on 2026-10-22 (PyPI). Licences: sherpa-onnx Apache-2.0, numpy BSD-3-Clause, fastapi MIT,
+# uvicorn BSD-3-Clause, websockets BSD-3-Clause.
+# You also need a sherpa-onnx streaming NeMo-transducer model directory (encoder/decoder/joiner .onnx + tokens.txt), STTS_MODEL_DIR.
+# Check the licence of the model you download (NVIDIA NeMo models are usually CC-BY-4.0); this repo does not ship or name a default.
+sherpa-onnx==1.13.8
+numpy==2.5.4
+fastapi==0.159.1
+uvicorn==0.54.0
+websockets==17.3

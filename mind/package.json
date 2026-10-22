@@ -1,0 +1,11 @@
+{
+  "name": "wren-mind",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Wren's mind: drives, memory, wants, lessons-to-constraints, digest. No dependencies (node:sqlite).",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "license": "Apache-2.0"
+}

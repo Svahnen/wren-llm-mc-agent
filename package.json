@@ -1,0 +1,19 @@
+{
+  "name": "wren-llm-mc-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Wren: a Mineflayer survival bot with fast reflexes (S1) and an LLM planner (S2).",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "install:bot": "npm ci --prefix bot",
+    "test": "npm test --prefix bot && npm test --prefix brain && npm test --prefix mind && npm test --prefix voice && npm test --prefix report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Svahnen/wren-llm-mc-agent.git"
+  },
+  "author": "Jonny Svahn (Svahnen)"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "food_round",
+  "desc": "your morning food round: harvest and replant the farm, bake bread from 3 wheat, feed the animals in your pen so they breed (each part is skipped when there is nothing to do; it only runs in daylight)",
+  "params": {},
+  "cooldown": { "reasons": ["nothing_to_tend"], "s": 600, "radius": 60, "text": "the farm is still growing and the pen has nothing to do", "hint": "do something else and check again later" },
+  "steps": [
+    { "id": "any", "when": ["!farm_known", "!pen_known"], "op": "fail", "args": { "reason": "nothing_to_tend" }, "on_fail": { "abort": "nothing_to_tend" } },
+    { "id": "harvest", "when": ["farm_known", "day", "!hostile_near"], "do": { "skill": "farm_harvest", "args": {} }, "on_fail": "skip" },
+    { "id": "bread", "when": ["has_item:wheat:3"], "do": { "skill": "craft", "args": { "item": "bread" } }, "on_fail": "skip" },
+    { "id": "breed", "when": ["pen_known", "has_feed", "day", "!hostile_near"], "do": { "skill": "breed_animals", "args": {} }, "on_fail": "skip" }
+  ]
+}

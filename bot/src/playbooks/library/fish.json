@@ -1,0 +1,12 @@
+{
+  "name": "fish",
+  "desc": "fish with a rod from a bank (crafts the rod from 3 sticks + 2 string if you have string); finds water within 16 m, casts, waits for the bite, reels in",
+  "params": { "catches": { "kind": "int", "default": 2 } },
+  "cooldown": { "reasons": ["no_rod", "no_water"], "s": 180, "radius": 40, "text": "cannot fish here: no fishing rod (needs 2 string + 3 sticks) or no water within 40 m", "hint": "string comes from spiders and cobwebs; without it use get_food hunt or explore_and_return to find a pond" },
+  "steps": [
+    { "id": "rod", "desc": "make a rod", "when": ["!has_rod", "can_make_rod"], "do": { "skill": "craft", "args": { "item": "fishing_rod" } }, "on_fail": "skip" },
+    { "id": "need_rod", "when": ["!has_rod"], "op": "fail", "args": { "reason": "no_rod" }, "on_fail": { "abort": "no_rod" } },
+    { "id": "find_water", "desc": "walk until water is within 16 m", "when": ["!water_within:16", "day"], "loop": { "until": ["water_within:16"], "max": 3 }, "do": { "skill": "explore", "args": { "direction": "any" } }, "on_fail": { "abort": "no_water" } },
+    { "id": "cast", "desc": "bank, cast, wait for the bite, reel", "when": ["!hostile_near"], "do": { "skill": "fish", "args": { "catches": "$catches" } }, "retry": 1, "on_fail": { "abort": "no_catch" } }
+  ]
+}

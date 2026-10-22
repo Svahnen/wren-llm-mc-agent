@@ -1,0 +1,7 @@
+{
+  "name": "dig_in",
+  "desc": "emergency: seal yourself in where you stand (walls from any blocks, or dig two down and cap)",
+  "params": {},
+  "done_if": ["sealed"],
+  "steps": [ { "id": "dig", "do": { "skill": "dig_in", "args": {} }, "retry": 1, "on_fail": { "abort": "cannot_dig_in" } } ]
+}

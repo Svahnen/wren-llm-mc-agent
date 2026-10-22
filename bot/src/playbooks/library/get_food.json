@@ -1,0 +1,24 @@
+{
+  "name": "get_food",
+  "desc": "get something to eat, trying the most feasible way first: eat what you hold, cook raw meat, hunt near, go to where animals were seen, hit fish, fish with a rod, pick berries, search",
+  "params": {},
+  "done_if": ["food_ge:18"],
+  "cooldown": { "reasons": ["no_food_found"], "s": 120, "radius": 40, "text": "no food within {r} m (nothing held, nothing to cook, no animals or fish seen)", "hint": "walk to a new area: explore_and_return radius=80 toward a direction you have not been, or look for a different biome" },
+  "steps": [
+    { "id": "eat_held", "desc": "eat cooked/ready food you hold", "when": ["has_cooked", "food_lt:20"], "do": { "skill": "eat", "args": {} }, "retry": 1, "on_fail": "skip" },
+    { "id": "eat_risky", "desc": "eat risky food only if the body needs it", "when": ["!has_food", "has_bad_food", "food_le:6"], "do": { "skill": "eat", "args": {} }, "on_fail": "skip" },
+    { "id": "wood_for_table", "desc": "raw meat, fuel and cobblestone but no crafting table: chop a little wood so a furnace can be made", "when": ["has_raw", "has_fuel", "needs_table_for_furnace", "food_gt:8", "day", "free_slots_ge:2"], "do": { "skill": "gather_wood", "args": { "count": 2 } }, "retry": 0, "on_fail": "skip" },
+    { "id": "cook_raw", "desc": "cook raw meat (no furnace needed in the pack: one is made from 8 cobblestone)", "when": ["has_raw", "has_fuel", "can_make_furnace", "food_gt:5"], "do": { "skill": "cook", "args": {} }, "retry": 0, "on_fail": "skip" },
+    { "id": "eat_cooked", "desc": "eat", "when": ["has_cooked", "food_lt:20"], "do": { "skill": "eat", "args": {} }, "on_fail": "skip" },
+    { "id": "obtain", "desc": "obtain food", "loop": { "until": ["has_food"], "max": 8 }, "choose": [
+      { "id": "hunt_near", "when": ["animals_near", "free_slots_ge:2"], "do": { "skill": "hunt", "args": {} }, "ok": ["has_food"] },
+      { "id": "go_to_herd", "when": ["!animals_near", "food_source_known", "free_slots_ge:2"], "op": "route_food", "args": {}, "ok": ["animals_near"] },
+      { "id": "hit_fish", "when": ["fish_near", "free_slots_ge:2"], "do": { "skill": "hunt", "args": { "target": "fish" } }, "ok": ["has_food"] },
+      { "id": "fish_rod", "when": ["has_rod", "water_near", "day"], "do": { "skill": "fish", "args": {} }, "ok": ["has_food"] },
+      { "id": "pick_plants", "desc": "ripe sweet berries, crops, melon (or apples from oak leaves)", "when": ["day", "free_slots_ge:1"], "do": { "skill": "forage_plants", "args": { "count": 4 } }, "ok": ["has_food"] },
+      { "id": "explore_for_food", "desc": "walk toward unexplored ground (novelty-biased) until animals or fish show up", "when": ["day"], "do": { "skill": "explore", "args": { "direction": "any" } } }
+    ], "on_fail": { "abort": "no_food_found" } },
+    { "id": "cook_after", "when": ["has_raw", "has_fuel", "can_make_furnace", "food_gt:5"], "do": { "skill": "cook", "args": {} }, "on_fail": "skip" },
+    { "id": "eat_final", "desc": "eat", "when": ["has_food", "food_lt:20"], "do": { "skill": "eat", "args": {} }, "on_fail": "skip" }
+  ]
+}

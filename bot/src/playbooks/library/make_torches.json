@@ -1,0 +1,137 @@
+{
+  "name": "make_torches",
+  "desc": "make torches without coal: logs are smelted into charcoal in a furnace (made from 8 cobblestone), then charcoal + sticks become torches (1 charcoal + 1 stick = 4 torches); wood is chopped first when needed (about 7 logs for 8 torches, the logs are also the fuel). Result says torches before/after",
+  "params": {
+    "count": {
+      "kind": "int",
+      "default": 8
+    }
+  },
+  "cooldown": {
+    "reasons": [
+      "no_wood",
+      "no_stone",
+      "no_charcoal",
+      "night",
+      "not_enough_logs",
+      "torches_short"
+    ],
+    "s": 300,
+    "radius": 40,
+    "text": "cannot make torches here: no wood, no stone for a furnace, or charcoal failed",
+    "hint": "resource_expedition resource=wood or stone walks to fresh ground; coal ore on a hillside gives torches faster"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "torch",
+          "charcoal",
+          "coal",
+          "stick",
+          "cobblestone",
+          "furnace"
+        ]
+      }
+    },
+    {
+      "id": "gate",
+      "op": "daylight_gate",
+      "args": {
+        "what": "make_torches",
+        "have_logs": "$logs"
+      },
+      "when": [
+        "!coal_ge:$crafts"
+      ],
+      "on_fail": {
+        "abort": "night"
+      }
+    },
+    {
+      "id": "wood",
+      "desc": "logs for charcoal (they are also the fuel), sticks and a table",
+      "when": [
+        "!coal_ge:$crafts",
+        "!has_match:_log$:$logs",
+        "day",
+        "!hostile_near",
+        "free_slots_ge:2"
+      ],
+      "do": {
+        "skill": "gather_wood",
+        "args": {
+          "count": "$logs"
+        }
+      },
+      "retry": 1,
+      "on_fail": "skip"
+    },
+    {
+      "id": "stone",
+      "desc": "8 cobblestone for the furnace",
+      "when": [
+        "!coal_ge:$crafts",
+        "!furnace_near",
+        "!has_item:furnace:1",
+        "!has_match:^cobblestone$:8",
+        "day",
+        "!hostile_near"
+      ],
+      "do": {
+        "skill": "gather_stone",
+        "args": {
+          "count": 8
+        }
+      },
+      "retry": 1,
+      "on_fail": "skip"
+    },
+    {
+      "id": "charcoal",
+      "desc": "smelt logs into charcoal",
+      "when": [
+        "!coal_ge:$crafts"
+      ],
+      "do": {
+        "skill": "make_charcoal",
+        "args": {
+          "count": "$crafts"
+        }
+      },
+      "retry": 1,
+      "on_fail": "skip"
+    },
+    {
+      "id": "craft",
+      "desc": "torches from charcoal/coal + sticks",
+      "when": [
+        "coal_ge:1"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "torch",
+          "count": "$torch_call"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "report",
+      "op": "rs3_report",
+      "args": {
+        "what": "make_torches",
+        "goal": {
+          "items": [
+            "torch"
+          ],
+          "n": 1
+        },
+        "reason": "torches_short"
+      }
+    }
+  ]
+}

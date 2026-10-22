@@ -1,0 +1,9 @@
+{
+  "name": "wall_ring",
+  "desc": "put a wall two blocks high around where you stand, from any solid blocks you hold",
+  "params": { "height": { "kind": "int", "default": 2 } },
+  "steps": [
+    { "id": "blocks", "when": ["!blocks_ge:8", "free_slots_ge:2"], "do": { "skill": "collect", "args": { "resource": "dirt", "count": 10 } }, "on_fail": "skip" },
+    { "id": "ring", "do": { "skill": "build", "args": { "plan": "wall_ring", "height": "$height" } }, "retry": 1, "on_fail": { "abort": "could_not_wall" } }
+  ]
+}

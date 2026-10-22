@@ -1,0 +1,5 @@
+{"_note":"small example fixture: a critical-state digest slice, a model answer and the reprompt message",
+ "inventory":{"stick":2,"wheat_seeds":4,"furnace":10,"crafting_table":1,"kelp":1,"egg":2,"oak_sapling":3,"string":2,"chest":1,"arrow":1,"feather":5,"wooden_pickaxe":1,"sand":12,"white_wool":1,"torch":4,"oak_log":2,"coal":3,"wooden_sword":1,"fishing_rod":1,"wooden_axe":1},
+ "health":3.1,"food":12,"hostile":{"id":"creeper_1","dist":24.7},
+ "answer":"{act:eat,args:{item:kelp}}\n",
+ "old_reprompt_msg":"your line 1 is {act:none}, which does nothing: words in THINK or SAY are not actions. You are in a critical state; put the action you chose into line 1"}

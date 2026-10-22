@@ -1,0 +1,14 @@
+{
+  "name": "gather",
+  "desc": "collect `count` of a resource (wood, stone, coal, iron, sand, dirt, plants)",
+  "params": { "resource": { "kind": "resource", "required": true }, "count": { "kind": "int", "default": 6 } },
+  "cooldown": { "reasons": ["could_not_gather"], "s": 300, "radius": 40, "text": "nothing to gather within {r} m (searched, no usable block or tree)", "hint": "the ground around here is used up: resource_expedition resource=<wood|stone|food> walks to a remembered or new place in daylight, collects there and comes home" },
+  "steps": [
+    { "id": "collect", "loop": { "until": ["gained:$resource:$count"], "max": 6 }, "choose": [
+      { "id": "wood", "when": ["param_is:resource:wood", "free_slots_ge:2"], "do": { "skill": "gather_wood", "args": { "count": 4 } } },
+      { "id": "stone", "when": ["param_is:resource:stone", "free_slots_ge:2"], "do": { "skill": "gather_stone", "args": { "count": 8 } } },
+      { "id": "other", "when": ["!param_is:resource:wood", "!param_is:resource:stone", "free_slots_ge:2"], "do": { "skill": "collect", "args": { "resource": "$resource", "count": 4 } } },
+      { "id": "search", "when": ["day"], "do": { "skill": "explore", "args": { "direction": "any" } } }
+    ], "on_fail": { "abort": "could_not_gather" } }
+  ]
+}

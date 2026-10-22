@@ -1,0 +1,159 @@
+{
+  "name": "fish_session",
+  "desc": "fish with a rod for `minutes` (1-30, default 5) in short rounds, stopping when food reaches 18, the rod breaks, night comes or a hostile mob shows up; then cook and eat the catch. About one fish per 40 s under open sky. Needs a rod (3 sticks + 2 string) and water within 16 m. Result says fish caught and why it stopped",
+  "params": {
+    "minutes": {
+      "kind": "minutes",
+      "default": 5
+    }
+  },
+  "cooldown": {
+    "reasons": [
+      "no_rod",
+      "no_water",
+      "no_catch",
+      "no_bite",
+      "night",
+      "hostile_near",
+      "no_water_near"
+    ],
+    "s": 180,
+    "radius": 40,
+    "text": "fishing gave nothing here: no rod, no water, no bite, or night",
+    "hint": "string for a rod comes from spiders and cobwebs; fish_hit needs no rod; get_food hunts or searches instead"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "cod",
+          "salmon",
+          "cooked_cod",
+          "cooked_salmon",
+          "pufferfish",
+          "tropical_fish",
+          "fishing_rod"
+        ]
+      }
+    },
+    {
+      "id": "night",
+      "when": [
+        "!day"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "night"
+      },
+      "on_fail": {
+        "abort": "night"
+      }
+    },
+    {
+      "id": "rod",
+      "desc": "make a rod",
+      "when": [
+        "!has_rod",
+        "can_make_rod"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "fishing_rod"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "need_rod",
+      "when": [
+        "!has_rod"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "no_rod"
+      },
+      "on_fail": {
+        "abort": "no_rod"
+      }
+    },
+    {
+      "id": "find_water",
+      "desc": "walk until water is within 16 m",
+      "when": [
+        "!water_within:16",
+        "day"
+      ],
+      "loop": {
+        "until": [
+          "water_within:16"
+        ],
+        "max": 3
+      },
+      "do": {
+        "skill": "explore",
+        "args": {
+          "direction": "any"
+        }
+      },
+      "on_fail": {
+        "abort": "no_water"
+      }
+    },
+    {
+      "id": "session",
+      "desc": "cast, wait, reel in rounds",
+      "op": "fish_session",
+      "args": {
+        "minutes": "$minutes"
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "cook",
+      "when": [
+        "has_raw",
+        "has_fuel",
+        "can_make_furnace",
+        "food_gt:5"
+      ],
+      "do": {
+        "skill": "cook",
+        "args": {}
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "eat",
+      "when": [
+        "has_food",
+        "food_lt:20"
+      ],
+      "do": {
+        "skill": "eat",
+        "args": {}
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "report",
+      "op": "rs3_report",
+      "args": {
+        "what": "fish_session",
+        "goal": {
+          "items": [
+            "cod",
+            "salmon",
+            "cooked_cod",
+            "cooked_salmon"
+          ],
+          "n": 1,
+          "or_food_gain": 4
+        },
+        "reason": "no_catch"
+      }
+    }
+  ]
+}

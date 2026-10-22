@@ -1,0 +1,37 @@
+{
+  "name": "chicken_loop",
+  "desc": "the egg economy at your pen (or chickens near you): feed two hens seeds so a chick is born (5 min cooldown, pen kept at 4-6), pick up eggs, throw some at the chickens (about 1 egg in 8 hatches), take meat when the pen is big enough, cook it. Needs 2 seeds or eggs; daylight. Result lists each part honestly",
+  "params": {},
+  "cooldown": {
+    "reasons": [
+      "no_chickens",
+      "no_seeds",
+      "nothing_to_do",
+      "not_now"
+    ],
+    "s": 300,
+    "radius": 40,
+    "text": "no chickens to work with, no seeds, or nothing to do yet (hens lay one egg per 5-10 min, parents rest 5 min after breeding)",
+    "hint": "seed_hunt gets seeds; animal_pen fences chickens in; come back in a few minutes"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "egg",
+          "chicken",
+          "cooked_chicken",
+          "feather",
+          "wheat_seeds"
+        ]
+      }
+    },
+    {
+      "id": "loop",
+      "op": "chicken_run",
+      "args": {}
+    }
+  ]
+}

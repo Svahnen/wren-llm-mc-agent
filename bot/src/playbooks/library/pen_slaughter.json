@@ -1,0 +1,11 @@
+{
+  "name": "pen_slaughter",
+  "desc": "take meat from your pen: kills ONE adult animal, only when the pen holds 3 or more animals so the herd keeps breeding (cook the meat afterwards)",
+  "params": {},
+  "cooldown": { "reasons": ["pen_too_small", "no_pen_known"], "s": 300, "radius": 30, "text": "the pen has fewer than 3 animals, so nothing is killed", "hint": "breed_animals first and wait for the herd to grow" },
+  "steps": [
+    { "id": "known", "when": ["!pen_known"], "op": "fail", "args": { "reason": "no_pen_known" }, "on_fail": { "abort": "no_pen_known" } },
+    { "id": "go_pen", "when": ["!at_place:pen:6"], "do": { "skill": "go_to", "args": { "place": "pen" } }, "retry": 1, "on_fail": "skip" },
+    { "id": "kill", "when": ["!hostile_near"], "do": { "skill": "pen_slaughter", "args": {} }, "retry": 0, "on_fail": { "abort": "pen_too_small" } }
+  ]
+}

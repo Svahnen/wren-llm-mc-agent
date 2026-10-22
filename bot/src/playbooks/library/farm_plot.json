@@ -1,0 +1,12 @@
+{
+  "name": "farm_plot",
+  "desc": "make a 3x3 farm near water: wooden hoe from planks/sticks, seeds from tall grass, till, plant; the plot is remembered as place \"farm\"",
+  "params": {},
+  "cooldown": { "reasons": ["no_plot_site"], "s": 240, "radius": 40, "text": "no flat grass or dirt 3x3 within 14 m", "hint": "walk to open grassland (explore_and_return), preferably next to a pond or river" },
+  "steps": [
+    { "id": "wood", "desc": "wood for the hoe", "when": ["!has_hoe", "!can_make_hoe", "free_slots_ge:2"], "do": { "skill": "gather_wood", "args": { "count": 3 } }, "retry": 1, "on_fail": "skip" },
+    { "id": "hoe", "when": ["!has_hoe"], "do": { "skill": "craft", "args": { "item": "wooden_hoe" } }, "on_fail": "skip" },
+    { "id": "need_hoe", "when": ["!has_hoe"], "op": "fail", "args": { "reason": "no_hoe" }, "on_fail": { "abort": "no_hoe" } },
+    { "id": "plot", "when": ["day", "!hostile_near"], "do": { "skill": "farm_plot", "args": {} }, "retry": 1, "on_fail": { "abort": "could_not_farm" } }
+  ]
+}

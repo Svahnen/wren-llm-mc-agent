@@ -1,0 +1,131 @@
+{
+  "name": "seed_hunt",
+  "desc": "collect wheat seeds by breaking grass in daylight (about 1 grass in 8 drops a seed; 9 seeds need roughly 70 breaks), the first step of any farm; uses bone meal on the grass when you hold some and the grass runs out. Result says seeds before/after",
+  "params": {
+    "count": {
+      "kind": "int",
+      "default": 9
+    }
+  },
+  "cooldown": {
+    "reasons": [
+      "no_grass",
+      "grassed_out",
+      "seeds_short"
+    ],
+    "s": 240,
+    "radius": 40,
+    "text": "no grass left to break here (or not enough seeds dropped)",
+    "hint": "walk to a fresh meadow: explore_and_return, roam, or resource_expedition resource=food; bone meal on grass grows more"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "wheat_seeds",
+          "bone_meal"
+        ]
+      }
+    },
+    {
+      "id": "night",
+      "when": [
+        "!day"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "night"
+      },
+      "on_fail": {
+        "abort": "night"
+      }
+    },
+    {
+      "id": "danger",
+      "when": [
+        "hostile_near"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "hostile_near"
+      },
+      "on_fail": {
+        "abort": "hostile_near"
+      }
+    },
+    {
+      "id": "grass",
+      "desc": "break grass and ferns, pick up the seeds",
+      "loop": {
+        "until": [
+          "has_item:wheat_seeds:$count"
+        ],
+        "max": 4
+      },
+      "do": {
+        "skill": "grass_seeds",
+        "args": {
+          "count": "$batch",
+          "radius": 32
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "bonemeal",
+      "desc": "bone meal on a grass block makes new grass to break",
+      "when": [
+        "bone_meal",
+        "!has_item:wheat_seeds:$count",
+        "day",
+        "!hostile_near"
+      ],
+      "do": {
+        "skill": "bonemeal_grass",
+        "args": {
+          "uses": 2
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "grass2",
+      "desc": "break the sprouted grass",
+      "when": [
+        "!has_item:wheat_seeds:$count",
+        "day",
+        "!hostile_near"
+      ],
+      "loop": {
+        "until": [
+          "has_item:wheat_seeds:$count"
+        ],
+        "max": 3
+      },
+      "do": {
+        "skill": "grass_seeds",
+        "args": {
+          "count": "$batch",
+          "radius": 12
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "report",
+      "op": "rs3_report",
+      "args": {
+        "what": "seed_hunt",
+        "goal": {
+          "items": [
+            "wheat_seeds"
+          ],
+          "n": "$count"
+        },
+        "reason": "seeds_short"
+      }
+    }
+  ]
+}

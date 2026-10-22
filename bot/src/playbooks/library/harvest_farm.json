@@ -1,0 +1,11 @@
+{
+  "name": "harvest_farm",
+  "desc": "go to your farm plot, harvest the ripe crops and replant (nothing happens when they are still growing)",
+  "params": {},
+  "cooldown": { "reasons": ["not_grown"], "s": 600, "radius": 60, "text": "the crops at the farm are not ripe yet", "hint": "do something else and check again in a while" },
+  "steps": [
+    { "id": "known", "when": ["!farm_known"], "op": "fail", "args": { "reason": "no_farm_known" }, "on_fail": { "abort": "no_farm_known" } },
+    { "id": "go", "when": ["!at_place:farm:4"], "do": { "skill": "go_to", "args": { "place": "farm" } }, "retry": 1, "on_fail": { "abort": "cannot_reach_farm" } },
+    { "id": "harvest", "do": { "skill": "farm_harvest", "args": {} }, "on_fail": { "abort": "not_grown" } }
+  ]
+}

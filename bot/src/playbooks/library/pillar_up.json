@@ -1,0 +1,6 @@
+{
+  "name": "pillar_up",
+  "desc": "escape upward: stack blocks under your feet (any solid blocks) to get out of a pit or away from mobs",
+  "params": { "height": { "kind": "int", "default": 4 } },
+  "steps": [ { "id": "pillar", "do": { "skill": "build", "args": { "plan": "pillar_up", "height": "$height" } }, "retry": 1, "on_fail": { "abort": "cannot_pillar" } } ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "show_place_to_person",
+  "desc": "take a person to a place you know: find them, tell them, walk there with them (waiting if they fall behind), arrive, present it",
+  "commitment": true,
+  "params": { "person": { "kind": "player", "required": true }, "place": { "kind": "place", "required": true } },
+  "steps": [
+    { "id": "locate", "desc": "find the person", "op": "find_person", "args": { "person": "$person", "max_s": 40 }, "retry": 0, "on_fail": { "abort": "person_not_found" } },
+    { "id": "join", "desc": "walk up to them", "when": ["!person_within:$person:7"], "op": "approach_person", "args": { "person": "$person", "radius": 6 }, "retry": 1, "on_fail": "skip" },
+    { "id": "announce", "desc": "tell them where you are going", "op": "cue", "args": { "place": "$place", "cue": "show_start", "text": "You are about to take $person to $place ($place_dist m $place_dir). Tell them where you are going and ask them to follow; the words are yours." } },
+    { "id": "escort", "desc": "walk there together", "op": "escort", "args": { "person": "$person", "place": "$place", "follow_radius": 10, "wait_max_s": 90, "hop": 16 }, "retry": 1, "on_fail": { "abort": "could_not_get_there" } },
+    { "id": "wait_arrival", "desc": "let them catch up", "op": "wait_for_person", "args": { "person": "$person", "radius": 8, "max_s": 45 }, "on_fail": "skip" },
+    { "id": "present", "desc": "present the place", "op": "cue", "args": { "place": "$place", "cue": "show_arrived", "text": "You and $person are at $place. Show it to them; say what you want them to know." } }
+  ]
+}

@@ -1,0 +1,12 @@
+# Kokoro TTS server (tts_server.py). Install into your own venv: python3 -m venv tts-venv && tts-venv/bin/pip install -r requirements-tts.txt
+# Pinned to the versions current on 2026-10-22 (PyPI). Licences: kokoro/misaki Apache-2.0, torch BSD-3-Clause, numpy BSD-3-Clause,
+# soundfile BSD-3-Clause (wraps libsndfile, LGPL-2.1), fastapi MIT, uvicorn BSD-3-Clause, pydantic MIT.
+# NOTE: misaki[en] pulls in espeak-ng (GPL-3.0) via espeakng-loader. See NOTICE before redistributing a venv or container.
+kokoro==0.9.4
+misaki[en]==0.9.4
+torch==2.14.1
+numpy==2.5.4
+soundfile==0.14.0
+fastapi==0.159.1
+uvicorn==0.54.0
+pydantic==2.14.1

@@ -1,0 +1,15 @@
+{
+  "name": "make_tools",
+  "desc": "wood -> planks -> crafting table -> wooden pickaxe -> stone -> stone pickaxe, axe and sword",
+  "params": {},
+  "cooldown": { "reasons": ["no_wood", "no_stone"], "s": 300, "radius": 40, "text": "no usable trees or stone within {r} m: the ground around here is used up", "hint": "resource_expedition resource=wood (or stone) walks to a remembered or new place in daylight, collects there and comes home; or do something else first" },
+  "steps": [
+    { "id": "wood", "desc": "chop logs", "when": ["!has_match:_log$:3", "!has_match:_planks$:12"], "do": { "skill": "gather_wood", "args": { "count": 5 } }, "retry": 2, "ok": ["has_match:(_log|_planks)$:3"], "on_fail": { "abort": "no_wood" } },
+    { "id": "table", "desc": "crafting table", "when": ["!has_item:crafting_table:1", "!table_near"], "do": { "skill": "craft", "args": { "item": "crafting_table" } }, "done_if": ["table_near"], "retry": 1 },
+    { "id": "wood_pick", "desc": "wooden pickaxe", "when": ["!has_match:_pickaxe$:1"], "do": { "skill": "craft", "args": { "item": "wooden_pickaxe" } }, "retry": 1, "ok": ["has_match:_pickaxe$:1"] },
+    { "id": "stone", "desc": "mine stone", "when": ["!has_match:^cobblestone$:8"], "do": { "skill": "gather_stone", "args": { "count": 10 } }, "retry": 2, "ok": ["has_match:^cobblestone$:3"], "on_fail": { "abort": "no_stone" } },
+    { "id": "stone_pick", "when": ["!has_match:^(stone|iron|diamond)_pickaxe$:1"], "do": { "skill": "craft", "args": { "item": "stone_pickaxe" } }, "retry": 1, "on_fail": "skip" },
+    { "id": "stone_axe", "when": ["!has_match:^(stone|iron|diamond)_axe$:1"], "do": { "skill": "craft", "args": { "item": "stone_axe" } }, "on_fail": "skip" },
+    { "id": "stone_sword", "when": ["!has_match:^(stone|iron|diamond)_sword$:1"], "do": { "skill": "craft", "args": { "item": "stone_sword" } }, "on_fail": "skip" }
+  ]
+}

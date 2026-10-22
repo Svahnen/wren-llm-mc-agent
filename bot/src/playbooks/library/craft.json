@@ -1,0 +1,10 @@
+{
+  "name": "craft",
+  "desc": "craft an item (planks, stick, crafting_table, chest, wooden/stone tools, torch, furnace, bed); fetches wood or stone first if short",
+  "params": { "item": { "kind": "craftable", "required": true }, "count": { "kind": "int", "default": 1 } },
+  "steps": [
+    { "id": "materials_wood", "when": ["craft_needs:$item:wood"], "do": { "skill": "gather_wood", "args": { "count": 4 } }, "retry": 1, "on_fail": "skip" },
+    { "id": "materials_stone", "when": ["craft_needs:$item:stone"], "do": { "skill": "gather_stone", "args": { "count": 10 } }, "retry": 1, "on_fail": "skip" },
+    { "id": "make", "do": { "skill": "craft", "args": { "item": "$item", "count": "$count" } }, "retry": 1, "on_fail": { "abort": "could_not_craft" } }
+  ]
+}

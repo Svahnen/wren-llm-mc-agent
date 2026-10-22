@@ -1,0 +1,10 @@
+{
+  "name": "explore_and_return",
+  "desc": "walk out to see new ground at least `radius` blocks from here, then come back to where you started",
+  "params": { "radius": { "kind": "int", "default": 60 }, "direction": { "kind": "text", "default": "any" } },
+  "steps": [
+    { "id": "mark", "op": "mark_origin", "args": {} },
+    { "id": "out", "loop": { "until": ["far_from_origin:$radius"], "max": 5 }, "do": { "skill": "explore", "args": { "direction": "$direction" } }, "on_fail": "skip" },
+    { "id": "back", "op": "go_origin", "args": { "radius": 5 }, "retry": 1, "on_fail": { "abort": "could_not_return" } }
+  ]
+}

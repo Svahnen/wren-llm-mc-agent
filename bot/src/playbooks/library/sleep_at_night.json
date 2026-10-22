@@ -1,0 +1,17 @@
+{
+  "name": "sleep_at_night",
+  "desc": "go to your bed and sleep (night or thunder only); reads the game's messages if it does not work; falls back to shelter",
+  "params": {},
+  "steps": [
+    { "id": "check_night", "desc": "daylight: end at once (bed remembered) instead of waiting by the bed", "op": "night_gate", "args": {}, "on_fail": { "abort": "not_night" } },
+    { "id": "go_bed", "when": ["bed_known", "!at_place:bed:4"], "do": { "skill": "go_to", "args": { "place": "bed" } }, "retry": 1, "on_fail": "skip" },
+    { "id": "close_doors", "desc": "close doors around the bed", "do": { "skill": "close_doors_nearby", "args": { "radius": 8 } }, "on_fail": "skip" },
+    { "id": "sleep", "choose": [
+      { "id": "sleep_bed", "when": ["bed_known"], "do": { "skill": "sleep", "args": { "max_stay_s": 120 } } },
+      { "id": "sleep_item", "when": ["has_match:_bed$:1"], "do": { "skill": "sleep", "args": { "max_stay_s": 120 } } },
+      { "id": "shelter_instead", "when": ["blocks_ge:9"], "do": { "skill": "shelter", "args": {} } },
+      { "id": "dig_in_instead", "when": ["blocks_ge:6"], "do": { "skill": "dig_in", "args": {} } }
+    ], "retry": 0, "on_fail": "skip" },
+    { "id": "screen", "desc": "read what the game said", "op": "screen_report", "args": {} }
+  ]
+}

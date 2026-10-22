@@ -1,0 +1,132 @@
+{
+  "name": "bonemeal_ripen",
+  "desc": "use bone meal on the unripe crops of your farm until they are ripe (2-5 uses per wheat plant), then harvest, replant and bake bread (S2's choice; needs bone meal and a farm). The result counts ripe crops before and after",
+  "params": {},
+  "cooldown": {
+    "reasons": [
+      "no_bone_meal",
+      "no_farm_known",
+      "no_crops_found",
+      "already_ripe",
+      "not_ripened"
+    ],
+    "s": 300,
+    "radius": 40,
+    "text": "bone meal on the farm did nothing (none held, no farm, nothing planted, or already ripe)",
+    "hint": "harvest_farm if the crops are ripe; farm_plot to plant"
+  },
+  "steps": [
+    {
+      "id": "begin",
+      "op": "rs3_begin",
+      "args": {
+        "track": [
+          "bone_meal",
+          "wheat",
+          "wheat_seeds",
+          "carrot",
+          "potato",
+          "beetroot",
+          "bread"
+        ]
+      }
+    },
+    {
+      "id": "gate",
+      "when": [
+        "!bone_meal"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "no_bone_meal"
+      },
+      "on_fail": {
+        "abort": "no_bone_meal"
+      }
+    },
+    {
+      "id": "farm",
+      "when": [
+        "!farm_known"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "no_farm_known"
+      },
+      "on_fail": {
+        "abort": "no_farm_known"
+      }
+    },
+    {
+      "id": "night",
+      "when": [
+        "!day"
+      ],
+      "op": "fail",
+      "args": {
+        "reason": "night"
+      },
+      "on_fail": {
+        "abort": "night"
+      }
+    },
+    {
+      "id": "go",
+      "when": [
+        "!at_place:farm:8"
+      ],
+      "do": {
+        "skill": "go_to",
+        "args": {
+          "place": "farm"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "ripen",
+      "do": {
+        "skill": "bonemeal_ripen",
+        "args": {}
+      },
+      "on_fail": {
+        "abort": "not_ripened"
+      }
+    },
+    {
+      "id": "harvest",
+      "when": [
+        "!hostile_near"
+      ],
+      "do": {
+        "skill": "farm_harvest",
+        "args": {}
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "bread",
+      "op": "bake_all",
+      "args": {},
+      "on_fail": "skip"
+    },
+    {
+      "id": "report",
+      "op": "rs3_report",
+      "args": {
+        "what": "bonemeal_ripen",
+        "goal": {
+          "gain": [
+            "wheat",
+            "carrot",
+            "potato",
+            "beetroot",
+            "bread"
+          ],
+          "n": 1
+        },
+        "reason": "not_ripened"
+      }
+    }
+  ]
+}

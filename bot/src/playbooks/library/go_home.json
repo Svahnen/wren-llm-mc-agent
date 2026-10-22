@@ -1,0 +1,11 @@
+{
+  "name": "go_home",
+  "desc": "walk back to your home",
+  "params": {},
+  "steps": [
+    { "id": "go", "desc": "walk home", "choose": [
+      { "id": "go_to_home", "when": ["place_known:home"], "do": { "skill": "go_to", "args": { "place": "home" } }, "ok": ["inside_place:home:8"] },
+      { "id": "return_home", "when": ["home_known"], "do": { "skill": "return_home", "args": {} }, "ok": ["inside_place:home:8"] }
+    ], "retry": 1, "on_fail": { "abort": "no_route_home" } }
+  ]
+}

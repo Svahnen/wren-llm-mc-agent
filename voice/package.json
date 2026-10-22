@@ -1,0 +1,15 @@
+{
+  "name": "wren-voice",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "description": "Wren speech service: streaming STT, Kokoro TTS, turn-taking, WebSocket client of the Fabric voice mod, local HTTP API",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1 --test-force-exit test/unit.test.js test/archive.test.js test/e2e.test.js test/turnscore.test.js test/v3.test.js test/v4.test.js test/vocab.test.js test/thoughts.test.js test/sec1-http.test.js test/sec2-keys.test.js",
+    "test:dev": "node --test --test-concurrency=1 --test-force-exit test/voice2.e2e.test.js"
+  }
+}

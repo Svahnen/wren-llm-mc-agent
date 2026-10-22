@@ -1,0 +1,51 @@
+{
+  "name": "stair_down",
+  "desc": "dig a safe staircase down to y=<target_y> (never straight down; stops at lava, water, air gaps and falling blocks and tells you why)",
+  "params": {
+    "target_y": {
+      "kind": "sint",
+      "required": true
+    },
+    "direction": {
+      "kind": "string",
+      "default": "facing"
+    }
+  },
+  "done_if": [
+    "!y_gt:$target_y"
+  ],
+  "steps": [
+    {
+      "id": "pick",
+      "desc": "a wooden pickaxe when planks or logs are held",
+      "when": [
+        "!has_match:_pickaxe$:1",
+        "can_make_hoe"
+      ],
+      "do": {
+        "skill": "craft",
+        "args": {
+          "item": "wooden_pickaxe"
+        }
+      },
+      "on_fail": "skip"
+    },
+    {
+      "id": "dig",
+      "when": [
+        "!hostile_near"
+      ],
+      "do": {
+        "skill": "stair_down",
+        "args": {
+          "target_y": "$target_y",
+          "direction": "$direction"
+        }
+      },
+      "retry": 1,
+      "on_fail": {
+        "abort": "could_not_descend"
+      }
+    }
+  ]
+}

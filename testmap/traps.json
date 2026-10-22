@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "_doc": "Coordinates: x/z are LOCAL to the trap cell (0..19). y is RELATIVE to the floor-top block: rel 0 = the top floor block (absolute floor_y), rel 1 = standing level on the flat floor. A start y is the FEET block (tp y = floor_y + rel). Absolute cell origin = origin + (col,row)*cell.size.",
+  "origin": {"x": 10000, "z": 10000, "floor_y": 200},
+  "cell": {"size": 20, "cols": 5, "rows": 2, "floor_depth": 11, "clear_height": 14, "wall_height": 4},
+  "gamerules": {"keepInventory": "true", "doMobSpawning": "false", "doFireTick": "false", "doDaylightCycle": "false", "doWeatherCycle": "false"},
+  "traps": [
+    {"name": "pit2x2_3", "col": 0, "row": 0,
+     "desc": "2x2 pit, 3 deep, plain stone walls.",
+     "needs": "jump spam fails (3 up); needs place-block-under/pillar or dig staircase",
+     "start": {"x": 10.0, "y": -2, "z": 10.0, "yaw": 0},
+     "ops": [{"fill": [9, -2, 9, 10, 0, 10], "block": "air"}]},
+
+    {"name": "pit1x1_3", "col": 1, "row": 0,
+     "desc": "1x1 pit, 3 deep.",
+     "needs": "pillar up (place blocks) or dig a staircase",
+     "start": {"x": 9.5, "y": -2, "z": 9.5, "yaw": 0},
+     "ops": [{"fill": [9, -2, 9, 9, 0, 9], "block": "air"}]},
+
+    {"name": "pit1x1_6_walls", "col": 2, "row": 0,
+     "desc": "1x1 pit, 6 deep, plus a 2-high stone collar around the opening (8 blocks to climb).",
+     "needs": "pillar up 8 blocks (requires blocks, e.g. from digging the walls)",
+     "start": {"x": 9.5, "y": -5, "z": 9.5, "yaw": 0},
+     "ops": [{"fill": [9, -5, 9, 9, 0, 9], "block": "air"},
+             {"fill": [8, 1, 8, 10, 2, 10], "block": "minecraft:stone"},
+             {"fill": [9, 1, 9, 9, 2, 9], "block": "air"}]},
+
+    {"name": "lava_ring", "col": 3, "row": 0,
+     "desc": "3x3 stone island at floor level inside a 3-wide lava ring (lava 2 deep). Island is the start.",
+     "needs": "bridge with placed blocks (no swimming/jumping across); lava contact is a failure",
+     "start": {"x": 9.5, "y": 1, "z": 9.5, "yaw": 0},
+     "ops": [{"fill": [5, -1, 5, 13, 0, 13], "block": "minecraft:lava"},
+             {"fill": [8, -1, 8, 10, 0, 10], "block": "minecraft:stone"}]},
+
+    {"name": "cobweb_room", "col": 4, "row": 0,
+     "desc": "5x5x3 room filled with cobweb, stone shell, one 1x2 doorway on the west wall (x=6,z=9).",
+     "needs": "cut cobweb (sword/shears or slow break) toward the door; stuck-in-web slowdown",
+     "start": {"x": 9.5, "y": 1, "z": 9.5, "yaw": 90},
+     "ops": [{"fill": [6, 1, 6, 12, 4, 12], "block": "minecraft:stone"},
+             {"fill": [7, 1, 7, 11, 3, 11], "block": "minecraft:cobweb"},
+             {"fill": [6, 1, 9, 6, 2, 9], "block": "air"}]},
+
+    {"name": "powder_snow_pit", "col": 0, "row": 1,
+     "desc": "3x3 pit 3 deep completely filled with powder snow (bot sinks in without leather boots; freezes).",
+     "needs": "jump out of powder snow / place blocks; freezing damage while inside",
+     "start": {"x": 9.5, "y": 1, "z": 9.5, "yaw": 0},
+     "ops": [{"fill": [8, -2, 8, 10, 0, 10], "block": "minecraft:powder_snow"}]},
+
+    {"name": "water_column", "col": 1, "row": 1,
+     "desc": "1x1 shaft, water from rel -6 to rel 3 (10 deep), 3-high stone collar so the water surface is flush with the collar top.",
+     "needs": "swim up (jump held) and climb out over the collar edge; drowning is the failure mode",
+     "start": {"x": 9.5, "y": 2, "z": 9.5, "yaw": 0},
+     "ops": [{"fill": [8, 1, 8, 10, 3, 10], "block": "minecraft:stone"},
+             {"fill": [9, -6, 9, 9, 0, 9], "block": "minecraft:water"},
+             {"fill": [9, 1, 9, 9, 3, 9], "block": "minecraft:water"}]},
+
+    {"name": "trapdoor_cell", "col": 2, "row": 1,
+     "desc": "1x1 cell, 2 high, sunk in the floor (air rel -1..0), lid is a closed oak trapdoor (top half) flush with the floor.",
+     "needs": "open the trapdoor (use block), then place a block under / pillar to get out (2 up)",
+     "start": {"x": 9.5, "y": -1, "z": 9.5, "yaw": 0},
+     "ops": [{"fill": [9, -1, 9, 9, 0, 9], "block": "air"},
+             {"set": [9, 0, 9], "block": "minecraft:oak_trapdoor[half=top,open=false,facing=north]"}]},
+
+    {"name": "stone_box", "col": 3, "row": 1,
+     "desc": "Fully enclosed 3x3x3 hollow stone box (shell 1 thick); the roof is a single block layer above the interior (exit above = dig it).",
+     "needs": "dig up (pickaxe) the roof block, then pillar up to leave; canDig must be allowed in unstuck mode",
+     "start": {"x": 9.5, "y": 1, "z": 9.5, "yaw": 0},
+     "ops": [{"fill": [7, 1, 7, 11, 4, 11], "block": "minecraft:stone"},
+             {"fill": [8, 1, 8, 10, 3, 10], "block": "air"}]},
+
+    {"name": "thrash", "col": 4, "row": 1,
+     "desc": "10x10 field of fences, walls, slabs, stairs, panes, gates and trapdoors (deterministic, seed 7); start in a clear centre cell.",
+     "needs": "pathfinding through awkward collision shapes without oscillating; exit to any side counts",
+     "start": {"x": 9.5, "y": 1, "z": 9.5, "yaw": 0},
+     "ops": [{"thrash": {"area": [5, 5, 14, 14], "y": 1, "seed": 7, "density": 0.55, "keep_clear": [[8, 8], [8, 9], [9, 8], [9, 9], [10, 9], [9, 10]]}}]}
+  ]
+}

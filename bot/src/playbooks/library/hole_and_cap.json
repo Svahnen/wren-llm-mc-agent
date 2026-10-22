@@ -1,0 +1,14 @@
+{
+  "name": "hole_and_cap",
+  "desc": "night/danger hideout needing no blocks: dig 2 down, cap the hole above you, wait for morning, then climb out (exit=stay keeps you in until you run leave_hole)",
+  "params": { "exit": { "kind": "string", "default": "morning" } },
+  "cooldown": { "reasons": ["cannot_make_hole"], "s": 120, "radius": 20, "text": "this ground cannot be dug into safely (liquid, loose sand, rock floor or protected block)", "hint": "walk 20 m to plain soil, or use dig_in / shelter if you hold blocks" },
+  "steps": [
+    { "id": "dig", "desc": "dig two down and cap", "when": ["!in_hole"], "do": { "skill": "hole_and_cap", "args": {} }, "retry": 1, "on_fail": { "abort": "cannot_make_hole" } },
+    { "id": "wait", "desc": "wait inside until it is day and nothing hostile is near", "when": ["in_hole", "!param_is:exit:stay"], "op": "wait_until", "args": { "until": ["safe_to_leave"], "max_s": 1500, "poll_ms": 2000 }, "on_fail": { "abort": "still_unsafe_in_hole" } },
+    { "id": "exit", "desc": "climb out: break the cap, pillar up with the blocks you hold", "when": ["in_hole", "!param_is:exit:stay"], "choose": [
+      { "id": "pillar_out", "when": ["blocks_ge:2"], "do": { "skill": "exit_hole", "args": {} } },
+      { "id": "stairs_out", "do": { "skill": "dig_stairs_up", "args": {} } }
+    ], "retry": 1, "on_fail": { "abort": "cannot_exit_hole" } }
+  ]
+}

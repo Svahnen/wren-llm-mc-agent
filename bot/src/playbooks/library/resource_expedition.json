@@ -1,0 +1,13 @@
+{
+  "name": "resource_expedition",
+  "desc": "the area around home has no more of it: walk out in daylight to a remembered place (or new ground likely to have it), collect wood, stone or food, remember the place and walk home. Refuses at night or near dusk ('not now: dusk in N min')",
+  "params": { "resource": { "kind": "xres", "default": "any" }, "max_dist": { "kind": "dist", "default": 200 } },
+  "steps": [
+    { "id": "plan", "desc": "pick the resource and a destination, check the daylight", "op": "expedition_plan", "args": { "resource": "$resource", "max_dist": "$max_dist" } },
+    { "id": "out", "desc": "walk out to the destination", "op": "expedition_walk", "args": {}, "on_fail": "skip" },
+    { "id": "collect", "desc": "gather until the target count, a nearly full pack or the end of daylight", "op": "expedition_gather", "args": {}, "on_fail": "skip" },
+    { "id": "remember", "desc": "note where it was found", "op": "expedition_remember", "args": {}, "on_fail": "skip" },
+    { "id": "back", "desc": "walk home", "op": "expedition_home", "args": {}, "retry": 1, "on_fail": "skip" },
+    { "id": "report", "desc": "say what came of it", "op": "expedition_report", "args": {} }
+  ]
+}

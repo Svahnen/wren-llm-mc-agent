@@ -1,0 +1,12 @@
+{
+  "name": "torch_perimeter",
+  "desc": "ring a shelter or home with torches about 6 m apart (crafts torches from coal/charcoal + sticks first; goes home first if home is known and far)",
+  "params": { "radius": { "kind": "int", "default": 6 } },
+  "cooldown": { "reasons": ["no_torches"], "s": 180, "radius": 40, "text": "no torches and no coal or charcoal to make them", "hint": "gather resource=coal count=3 (look in cave walls), then try again" },
+  "steps": [
+    { "id": "go_home", "when": ["home_known", "!at_place:home:12"], "do": { "skill": "go_to", "args": { "place": "home" } }, "on_fail": "skip" },
+    { "id": "craft", "desc": "torches from coal/charcoal and sticks", "when": ["!torches_ge:6", "can_make_torches"], "do": { "skill": "craft", "args": { "item": "torch", "count": 8 } }, "on_fail": "skip" },
+    { "id": "enough", "when": ["!torches_ge:3"], "op": "fail", "args": { "reason": "no_torches" }, "on_fail": { "abort": "no_torches" } },
+    { "id": "ring", "do": { "skill": "torch_perimeter", "args": { "radius": "$radius" } }, "retry": 1, "on_fail": { "abort": "could_not_place_torches" } }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "simple_hut",
+  "desc": "build a simple hut (default 5x5, walls 2 high, a roof and a door gap) from any solid blocks; collects blocks first",
+  "params": { "size": { "kind": "int", "default": 5 } },
+  "steps": [
+    { "id": "blocks", "desc": "collect building blocks (any kind)", "when": ["!blocks_ge:$hut_blocks", "free_slots_ge:2", "!hostile_near"], "loop": { "until": ["blocks_ge:$hut_blocks"], "max": 6 }, "choose": [
+      { "id": "dirt", "do": { "skill": "collect", "args": { "resource": "dirt", "count": 32 } } },
+      { "id": "stone", "when": ["has_match:_pickaxe$:1"], "do": { "skill": "gather_stone", "args": { "count": 32 } } }
+    ], "on_fail": { "abort": "not_enough_blocks" } },
+    { "id": "build", "desc": "build the hut around you", "do": { "skill": "build", "args": { "plan": "simple_hut", "size": "$size" } }, "retry": 1, "on_fail": { "abort": "could_not_build" } }
+  ]
+}
